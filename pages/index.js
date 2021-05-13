@@ -1,31 +1,22 @@
-import { useState } from "react";
 import { connect } from "react-redux";
-import { setInfo } from "../redux/actions/main";
-import styles from "../styles/Home.module.css";
+import Search from "../components/search";
+import Nav from "../components/nav";
+import Footer from "../components/footer";
 
-function Home({ name, setInfo }) {
-  const [search, setSearch] = useState("");
-
+function Home({ search }) {
   return (
-    // need to move this to a component folder
-    <div className={styles.container}>
-      <p>Search {name}:</p>
-      <input
-        type="text"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <button onClick={() => setInfo(search)}>Submit</button>
-    </div>
+    <>
+      <Nav />
+      <main>
+        <Search />
+      </main>
+      <Footer />
+    </>
   );
 }
 
 const mapStateToProps = (state) => {
-  return { name: state.main.name };
+  return { search: state.main.search };
 };
 
-const mapDispatchToProps = {
-  setInfo,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);
