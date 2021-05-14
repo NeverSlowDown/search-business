@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { connect } from "react-redux";
 import { setInfo } from "../../redux/actions/main";
+import styled from "styled-components";
+
+const SearchInput = styled.input`
+  display: flex;
+  border: 2px solid black;
+`;
 
 function Search({ search, setInfo }) {
   const [activeSearch, setActiveSearch] = useState(search);
@@ -8,7 +14,7 @@ function Search({ search, setInfo }) {
   return (
     <div>
       <p>Search {activeSearch}:</p>
-      <input
+      <SearchInput
         type="text"
         value={activeSearch}
         onChange={(e) => setActiveSearch(e.target.value)}
