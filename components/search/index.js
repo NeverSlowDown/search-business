@@ -18,8 +18,8 @@ function Search({ search, setInfo }) {
 
   const handleSearch = () => {
     setInfo(activeSearch);
-    searchBusinesses();
-    // searchBusinesses({ variables: { location: activeSearch } });
+    // searchBusinesses();
+    searchBusinesses({ variables: { location: activeSearch } });
   };
 
   return (
