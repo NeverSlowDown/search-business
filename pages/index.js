@@ -1,16 +1,16 @@
 import { connect } from "react-redux";
 import Search from "../components/search";
+import BusinessesList from "../components/businessesList";
 import Nav from "../components/nav";
 import Footer from "../components/footer";
 
 function Home({ search }) {
   return (
     <>
-      <Nav />
-      <main>
-        <Search />
-      </main>
-      <Footer />
+      {/* <Nav /> */}
+      <Search />
+      <BusinessesList />
+      {/* <Footer /> */}
     </>
   );
 }
