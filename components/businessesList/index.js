@@ -6,20 +6,23 @@ import styled from "styled-components";
 const BusinessesListContainer = styled.section`
   display: flex;
   min-height: 50vh;
-  /* border-radius: 0 0 80px 80px; */
   position: relative;
   padding: 0 20px;
+  margin: 0 20px;
+  margin-top: -30px;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 0 10px 3px #0000002e;
+  padding: 20px;
+  z-index: 2;
+  flex-wrap: wrap;
+  flex-direction: column;
 `;
 
 const List = styled.ul`
   display: flex;
-  margin-top: -30px;
-  background: white;
-  border-radius: 20px 20px 0 0;
-  padding: 20px;
-  z-index: 2;
   width: 100%;
-  box-shadow: 0 0 10px 3px #0000002e;
+  margin-top: 40px;
 `;
 
 const Item = styled.li`
@@ -27,9 +30,15 @@ const Item = styled.li`
   flex-direction: column;
 `;
 
+const Title = styled.h1`
+  font-size: 1.25em;
+  font-weight: 700;
+`;
+
 function BusinessesList({ search, setInfo }) {
   return (
     <BusinessesListContainer>
+      <Title>Latest Search</Title>
       <List>
         <Item>hola</Item>
         <Item>hola</Item>

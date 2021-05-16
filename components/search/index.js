@@ -18,8 +18,8 @@ const Input = styled.input`
 
 const SearchContainer = styled.section`
   display: flex;
-  min-height: 50vh;
-  /* border-radius: 0 0 80px 80px; */
+  min-height: calc(50vh + 30px);
+  border-radius: 0 0 20px 20px;
   overflow: hidden;
   position: relative;
 `;
@@ -33,8 +33,8 @@ const BackgroundImage = styled.figure`
   justify-content: center;
   align-items: center;
   img {
-    height: 100%;
-    opacity: 0.9;
+    width: 100%;
+    opacity: 1;
     filter: grayscale(1);
   }
 `;
@@ -57,19 +57,35 @@ const Content = styled.div`
   color: white;
   flex-direction: column;
   z-index: 3;
+  align-items: center;
 `;
 
 const Label = styled.label`
   font-size: 1em;
   font-weight: 700;
+  align-self: flex-start;
 `;
 
 const InputContainer = styled.div`
   position: relative;
-  width: 100%;
+  width: ${(props) => (props.loading ? 13 : 100)}%;
   display: flex;
+  transition: 0.5s ease;
   flex-direction: column;
   justify-content: center;
+  animation: ${(props) => (props.error ? "errorInput 3s ease" : "none")};
+
+  @keyframes errorInput {
+    0% {
+      width: 13%;
+    }
+    50% {
+      width: 13%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
 `;
 
 const ButtonIconSave = styled.button`
@@ -84,6 +100,87 @@ const ButtonIconSave = styled.button`
   align-items: center;
   justify-content: center;
   right: 5px;
+  overflow: hidden;
+
+  animation: ${(props) => (props.error ? "error 1.5s ease" : "none")};
+
+  @keyframes error {
+    0% {
+      background: ${(props) => props.theme.main};
+    }
+    50% {
+      background: red;
+    }
+    100% {
+      background: ${(props) => props.theme.main};
+    }
+  }
+  svg {
+    path {
+      fill: white;
+    }
+    width: 20px;
+    height: 20px;
+    display: flex;
+  }
+`;
+
+const IconSearchContainer = styled.div`
+  transform: translateY(
+    ${(props) => (props.loading || props.error ? -20 : 0)}px
+  );
+  position: absolute;
+  svg {
+    transform: rotate(-65deg);
+    margin-left: 1px;
+  }
+`;
+const IconErrorContainer = styled.div`
+  /* transform: translateY(${(props) => (props.error ? 0 : 20)}px); */
+  position: absolute;
+  span {
+    color: white;
+    font-size: 1.7em;
+    font-weight: 400;
+  }
+  animation: ${(props) => (props.error ? "errorIn 2s ease forwards" : "")};
+  @keyframes errorIn {
+    0% {
+      transform: translateY(20px);
+    }
+
+    50% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(-20px);
+    }
+  }
+`;
+const IconSuccessContainer = styled.div`
+  animation: ${(props) => (props.data ? "success 2s ease" : "")};
+  position: absolute;
+  transform: translateY(${(props) => (props.data ? 0 : 20)}px);
+
+  @keyframes success {
+    0% {
+      transform: translateY(20px);
+    }
+
+    50% {
+      transform: translateY(0px);
+    }
+
+    100% {
+      transform: translateY(-20px);
+    }
+  }
+`;
+
+const IconEditContainer = styled.div`
+  transform: translateY(${(props) => (props.data ? 0 : 20)}px);
+  position: absolute;
 `;
 
 function Search({ search, setInfo }) {
@@ -101,21 +198,63 @@ function Search({ search, setInfo }) {
     <SearchContainer>
       <BackgroundImage>
         <img
-          src="https://image.freepik.com/free-photo/traveling-map-with-golden-pin_144627-23987.jpg"
+          src="https://images.unsplash.com/photo-1498354178607-a79df2916198?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80"
           alt="background-image-location"
         />
       </BackgroundImage>
       <BackgroundColor />
       <Content>
         <Label for="location">Location:</Label>
-        <InputContainer>
+        <InputContainer error={error} loading={loading}>
           <Input
             type="text"
             id="location"
             value={activeSearch}
             onChange={(e) => setActiveSearch(e.target.value)}
           />
-          <ButtonIconSave onClick={handleSearch}>Search</ButtonIconSave>
+          <ButtonIconSave error={error} onClick={handleSearch}>
+            Search
+            {/* We could handle icons by importing them from a separate file, but for now I take this way */}
+            <IconSearchContainer
+              loading={loading}
+              data={typeof data !== "undefined" && data.length > 0}
+            >
+              <svg className="svg-icon" viewBox="0 0 20 20">
+                <path
+                  fill="none"
+                  d="M12.323,2.398c-0.741-0.312-1.523-0.472-2.319-0.472c-2.394,0-4.544,1.423-5.476,3.625C3.907,7.013,3.896,8.629,4.49,10.102c0.528,1.304,1.494,2.333,2.72,2.99L5.467,17.33c-0.113,0.273,0.018,0.59,0.292,0.703c0.068,0.027,0.137,0.041,0.206,0.041c0.211,0,0.412-0.127,0.498-0.334l1.74-4.23c0.583,0.186,1.18,0.309,1.795,0.309c2.394,0,4.544-1.424,5.478-3.629C16.755,7.173,15.342,3.68,12.323,2.398z M14.488,9.77c-0.769,1.807-2.529,2.975-4.49,2.975c-0.651,0-1.291-0.131-1.897-0.387c-0.002-0.004-0.002-0.004-0.002-0.004c-0.003,0-0.003,0-0.003,0s0,0,0,0c-1.195-0.508-2.121-1.452-2.607-2.656c-0.489-1.205-0.477-2.53,0.03-3.727c0.764-1.805,2.525-2.969,4.487-2.969c0.651,0,1.292,0.129,1.898,0.386C14.374,4.438,15.533,7.3,14.488,9.77z"
+                ></path>
+              </svg>
+            </IconSearchContainer>
+            <IconErrorContainer error={error}>
+              <span>!</span>
+            </IconErrorContainer>
+            <IconSuccessContainer
+              data={typeof data !== "undefined" && data.length > 0}
+            >
+              <svg className="svg-icon" viewBox="0 0 20 20">
+                <path
+                  fill="none"
+                  d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
+                ></path>
+              </svg>
+            </IconSuccessContainer>
+            <IconEditContainer
+              data={typeof data !== "undefined" && data.length > 0}
+            >
+              <svg
+                version="1.1"
+                viewBox="0 0 20 20"
+                xmlSpace="preserve"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="pen">
+                  <path d="M1648.016,305.367L1390.795,48.149C1359.747,17.098,1318.466,0,1274.555,0c-43.907,0-85.188,17.098-116.236,48.148   L81.585,1124.866c-10.22,10.22-16.808,23.511-18.75,37.833L0.601,1621.186c-2.774,20.448,4.161,41.015,18.753,55.605   c12.473,12.473,29.313,19.352,46.714,19.352c2.952,0,5.923-0.197,8.891-0.601l458.488-62.231   c14.324-1.945,27.615-8.529,37.835-18.752L1648.016,537.844c31.049-31.048,48.146-72.33,48.146-116.237   C1696.162,377.696,1679.064,336.415,1648.016,305.367z M493.598,1505.366l-350.381,47.558l47.56-350.376L953.78,439.557   l302.818,302.819L493.598,1505.366z M1554.575,444.404l-204.536,204.533l-302.821-302.818l204.535-204.532   c8.22-8.218,17.814-9.446,22.802-9.446c4.988,0,14.582,1.228,22.803,9.446l257.221,257.218c8.217,8.217,9.443,17.812,9.443,22.799   S1562.795,436.186,1554.575,444.404z" />
+                </g>
+                <g id="Layer_1" />
+              </svg>
+            </IconEditContainer>
+          </ButtonIconSave>
         </InputContainer>
 
         {loading ? (
