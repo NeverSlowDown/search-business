@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { setInfo } from "../../redux/actions/main";
+import { setSearchLocation, setBusinesses } from "../../redux/actions/main";
 import styled from "styled-components";
 
 import { useLazyQuery } from "@apollo/client";
-import { SEARCH_BUSINESSES } from "./searchBusinessesQuery.js";
+import { SEARCH_LOCATION_BUSINESSES } from "./searchBusinessesQuery.js";
 
 const Input = styled.input`
   display: flex;
@@ -199,21 +199,22 @@ const IconErrorContainer = styled.div`
     }
   }
 `;
-function Search({ search, setInfo }) {
-  const [activeSearch, setActiveSearch] = useState(search);
-  const [searchBusinesses, { data, loading, error }] =
-    useLazyQuery(SEARCH_BUSINESSES);
+function Search({ location, setSearchLocation, setBusinesses }) {
+  const [activeLocation, setActiveLocation] = useState(location);
+  const [searchBusinesses, { data, loading, error }] = useLazyQuery(
+    SEARCH_LOCATION_BUSINESSES
+  );
 
   const handleSearch = () => {
-    setInfo(activeSearch);
-    // searchBusinesses();
-    searchBusinesses({ variables: { location: activeSearch } });
+    setSearchLocation(activeLocation);
+    searchBusinesses({ variables: { location: activeLocation } });
   };
 
-  console.log(
-    typeof data !== "undefined" && data.search.total > 0,
-    typeof data !== "undefined"
-  );
+  useEffect(() => {
+    if (typeof data !== "undefined" && data.search.total > 0) {
+      setBusinesses(data.search.business);
+    }
+  }, [data]);
 
   return (
     <SearchContainer>
@@ -230,8 +231,8 @@ function Search({ search, setInfo }) {
           <Input
             type="text"
             id="location"
-            value={activeSearch}
-            onChange={(e) => setActiveSearch(e.target.value)}
+            value={activeLocation}
+            onChange={(e) => setActiveLocation(e.target.value)}
           />
           <ButtonIconSave error={error} onClick={handleSearch}>
             Search
@@ -273,11 +274,12 @@ function Search({ search, setInfo }) {
 }
 
 const mapStateToProps = (state) => {
-  return { search: state.main.search };
+  return { location: state.main.location };
 };
 
 const mapDispatchToProps = {
-  setInfo,
+  setSearchLocation,
+  setBusinesses,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

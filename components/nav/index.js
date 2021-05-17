@@ -17,7 +17,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  // setInfo,
+  // setSearchLocation,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

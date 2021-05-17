@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { connect } from "react-redux";
-import { setInfo } from "../../redux/actions/main";
+import { setSearchLocation } from "../../redux/actions/main";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+import { isNil } from "ramda";
+import Card from "../card";
 
 const BusinessesListContainer = styled.section`
   display: flex;
   min-height: 50vh;
   position: relative;
   padding: 0 20px;
-  margin: 0 20px;
+  margin: 0 10px;
   margin-top: -30px;
-  background: white;
+  background: #fbfbfb;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 0 10px 3px #0000002e;
   padding: 20px;
@@ -23,6 +26,8 @@ const List = styled.ul`
   display: flex;
   width: 100%;
   margin-top: 40px;
+  flex-wrap: wrap;
+  overflow: hidden;
 `;
 
 const Item = styled.li`
@@ -35,25 +40,40 @@ const Title = styled.h1`
   font-weight: 700;
 `;
 
-function BusinessesList({ search, setInfo }) {
+function BusinessesList({ location, businessList }) {
   return (
     <BusinessesListContainer>
-      <Title>Latest Search</Title>
+      <Title>Latest search in {location}</Title>
       <List>
-        <Item>hola</Item>
-        <Item>hola</Item>
-        <Item>hola</Item>
+        {!isNil(businessList) ? (
+          businessList.map((item) => {
+            return <Card item={item} key={item.id} />;
+          })
+        ) : (
+            <p>No results available, try search businesses</p>
+          )}
       </List>
     </BusinessesListContainer>
   );
 }
 
 const mapStateToProps = (state) => {
-  return { search: state.main.search };
+  return { location: state.main.location, businessList: state.main.businesses };
 };
 
 const mapDispatchToProps = {
-  setInfo,
+  setSearchLocation,
+};
+
+BusinessesList.propTypes = {
+  businessList: {
+    name: PropTypes.string,
+    id: PropTypes.string,
+    alias: PropTypes.string,
+    rating: PropTypes.number,
+    url: PropTypes.string,
+    photos: PropTypes.arrayOf(PropTypes.string),
+  },
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessesList);

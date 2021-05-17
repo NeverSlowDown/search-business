@@ -2,7 +2,7 @@ import * as t from "../types";
 
 const main = (
   state = {
-    search: "initial search",
+    location: "miami",
   },
   action
 ) => {
@@ -10,8 +10,15 @@ const main = (
     case t.SET_SEARCH:
       return {
         ...state,
-        search: action.payload,
+        location: action.payload,
       };
+
+    case t.SET_BUSINESSES:
+      return {
+        ...state,
+        businesses: action.payload,
+      };
+
     default:
       return { ...state };
   }
