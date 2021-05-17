@@ -199,32 +199,6 @@ const IconErrorContainer = styled.div`
     }
   }
 `;
-const IconSuccessContainer = styled.div`
-  animation: ${(props) => (props.data ? "success 2s ease" : "")};
-  position: absolute;
-  transform: translateY(${(props) => (props.data ? 0 : 30)}px);
-
-  @keyframes success {
-    0% {
-      transform: translateY(30px);
-    }
-
-    50% {
-      transform: translateY(0px);
-    }
-
-    100% {
-      transform: translateY(-30px);
-    }
-  }
-`;
-
-const IconEditContainer = styled.div`
-  transform: translateY(${(props) => (props.data ? 0 : 30)}px);
-  position: absolute;
-  transition: 0.5s ease;
-`;
-
 function Search({ search, setInfo }) {
   const [activeSearch, setActiveSearch] = useState(search);
   const [searchBusinesses, { data, loading, error }] =
@@ -236,6 +210,11 @@ function Search({ search, setInfo }) {
     searchBusinesses({ variables: { location: activeSearch } });
   };
 
+  console.log(
+    typeof data !== "undefined" && data.search.total > 0,
+    typeof data !== "undefined"
+  );
+
   return (
     <SearchContainer>
       <BackgroundImage>
@@ -246,7 +225,7 @@ function Search({ search, setInfo }) {
       </BackgroundImage>
       <BackgroundColor />
       <Content>
-        <Label for="location">Location:</Label>
+        <Label htmlFor="location">Location:</Label>
         <InputContainer error={error} loading={loading}>
           <Input
             type="text"
@@ -259,7 +238,7 @@ function Search({ search, setInfo }) {
             {/* We could handle icons by importing them from a separate file, but for now I take this way */}
             <IconSearchContainer
               loading={loading}
-              data={typeof data !== "undefined" && data.length > 0}
+              data={typeof data !== "undefined" && data.search.total > 0}
               error={error}
             >
               <svg className="svg-icon" viewBox="0 0 20 20">
@@ -284,41 +263,10 @@ function Search({ search, setInfo }) {
             <IconErrorContainer error={error}>
               <span>!</span>
             </IconErrorContainer>
-            <IconSuccessContainer
-              data={typeof data !== "undefined" && data.length > 0}
-            >
-              <svg className="svg-icon" viewBox="0 0 20 20">
-                <path
-                  fill="none"
-                  d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                ></path>
-              </svg>
-            </IconSuccessContainer>
-            <IconEditContainer
-              data={typeof data !== "undefined" && data.length > 0}
-            >
-              <svg
-                version="1.1"
-                viewBox="0 0 20 20"
-                xmlSpace="preserve"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="pen">
-                  <path d="M1648.016,305.367L1390.795,48.149C1359.747,17.098,1318.466,0,1274.555,0c-43.907,0-85.188,17.098-116.236,48.148   L81.585,1124.866c-10.22,10.22-16.808,23.511-18.75,37.833L0.601,1621.186c-2.774,20.448,4.161,41.015,18.753,55.605   c12.473,12.473,29.313,19.352,46.714,19.352c2.952,0,5.923-0.197,8.891-0.601l458.488-62.231   c14.324-1.945,27.615-8.529,37.835-18.752L1648.016,537.844c31.049-31.048,48.146-72.33,48.146-116.237   C1696.162,377.696,1679.064,336.415,1648.016,305.367z M493.598,1505.366l-350.381,47.558l47.56-350.376L953.78,439.557   l302.818,302.819L493.598,1505.366z M1554.575,444.404l-204.536,204.533l-302.821-302.818l204.535-204.532   c8.22-8.218,17.814-9.446,22.802-9.446c4.988,0,14.582,1.228,22.803,9.446l257.221,257.218c8.217,8.217,9.443,17.812,9.443,22.799   S1562.795,436.186,1554.575,444.404z" />
-                </g>
-                <g id="Layer_1" />
-              </svg>
-            </IconEditContainer>
           </ButtonIconSave>
         </InputContainer>
 
-        {loading ? (
-          <p>it's loading</p>
-        ) : error ? (
-          <p>error encountered, try again later</p>
-        ) : (
-          <p>yes!</p>
-        )}
+        {error && <p>error, please try again</p>}
       </Content>
     </SearchContainer>
   );
