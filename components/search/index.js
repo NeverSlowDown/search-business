@@ -21,7 +21,8 @@ const SearchContainer = styled.section`
   min-height: calc(50vh + 30px);
   border-radius: 0 0 20px 20px;
   overflow: hidden;
-  position: relative;
+  position: sticky;
+  top: 0;
 `;
 
 const BackgroundImage = styled.figure`
@@ -44,8 +45,13 @@ const BackgroundColor = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  background: ${(props) => props.theme.secondary};
-  opacity: 0.8;
+  background: linear-gradient(
+    360deg,
+    ${(props) => props.theme.secondary} 0%,
+    ${(props) => props.theme.secondary} 50%,
+    rgba(255, 211, 56, 1) 100%
+  );
+  opacity: 0.7;
 `;
 
 const Content = styled.div`

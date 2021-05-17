@@ -23,11 +23,13 @@ const BusinessesListContainer = styled.section`
 `;
 
 const List = styled.ul`
-  display: flex;
   width: 100%;
   margin-top: 40px;
-  flex-wrap: wrap;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 320px);
+  grid-gap: 20px;
+  justify-content: space-around;
+  grid-auto-rows: minmax(min-content, max-content);
 `;
 
 const Item = styled.li`
@@ -66,14 +68,14 @@ const mapDispatchToProps = {
 };
 
 BusinessesList.propTypes = {
-  businessList: {
+  businessList: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.string,
     alias: PropTypes.string,
     rating: PropTypes.number,
     url: PropTypes.string,
     photos: PropTypes.arrayOf(PropTypes.string),
-  },
+  }),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessesList);
