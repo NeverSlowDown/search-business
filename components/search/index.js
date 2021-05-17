@@ -73,7 +73,7 @@ const InputContainer = styled.div`
   transition: 0.5s ease;
   flex-direction: column;
   justify-content: center;
-  animation: ${(props) => (props.error ? "errorInput 3s ease" : "none")};
+  animation: ${(props) => (props.error ? "errorInput 2s ease" : "none")};
 
   @keyframes errorInput {
     0% {
@@ -126,27 +126,68 @@ const ButtonIconSave = styled.button`
 `;
 
 const IconSearchContainer = styled.div`
-  transform: translateY(
-    ${(props) => (props.loading || props.error ? -20 : 0)}px
-  );
+  transform: translateY(${(props) => (props.loading ? -30 : 0)}px);
   position: absolute;
+  transition: 0.5s ease;
   svg {
     transform: rotate(-65deg);
     margin-left: 1px;
   }
+
+  animation: ${(props) => (props.error ? "errorSearch 3s ease forwards" : "")};
+  @keyframes errorSearch {
+    0% {
+      transform: translateY(-30px);
+    }
+
+    25% {
+      transform: translateY(-30px);
+    }
+
+    50% {
+      transform: translateY(-30px);
+    }
+
+    75% {
+      transform: translateY(0px);
+    }
+
+    100% {
+      transform: translateY(0px);
+    }
+  }
 `;
+
+const IconLoadingContainer = styled.div`
+  transform: translateY(${(props) => (props.loading ? 0 : -30)}px);
+  position: absolute;
+  transition: 0.5s ease;
+  svg {
+    animation: loading 0.5s ease infinite;
+  }
+
+  @keyframes loading {
+    0% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 const IconErrorContainer = styled.div`
-  /* transform: translateY(${(props) => (props.error ? 0 : 20)}px); */
+  transform: translateY(${(props) => (props.error ? 0 : 30)}px);
   position: absolute;
   span {
     color: white;
-    font-size: 1.7em;
+    font-size: 1.25em;
     font-weight: 400;
   }
   animation: ${(props) => (props.error ? "errorIn 2s ease forwards" : "")};
   @keyframes errorIn {
     0% {
-      transform: translateY(20px);
+      transform: translateY(30px);
     }
 
     50% {
@@ -154,18 +195,18 @@ const IconErrorContainer = styled.div`
     }
 
     100% {
-      transform: translateY(-20px);
+      transform: translateY(-30px);
     }
   }
 `;
 const IconSuccessContainer = styled.div`
   animation: ${(props) => (props.data ? "success 2s ease" : "")};
   position: absolute;
-  transform: translateY(${(props) => (props.data ? 0 : 20)}px);
+  transform: translateY(${(props) => (props.data ? 0 : 30)}px);
 
   @keyframes success {
     0% {
-      transform: translateY(20px);
+      transform: translateY(30px);
     }
 
     50% {
@@ -173,14 +214,15 @@ const IconSuccessContainer = styled.div`
     }
 
     100% {
-      transform: translateY(-20px);
+      transform: translateY(-30px);
     }
   }
 `;
 
 const IconEditContainer = styled.div`
-  transform: translateY(${(props) => (props.data ? 0 : 20)}px);
+  transform: translateY(${(props) => (props.data ? 0 : 30)}px);
   position: absolute;
+  transition: 0.5s ease;
 `;
 
 function Search({ search, setInfo }) {
@@ -218,6 +260,7 @@ function Search({ search, setInfo }) {
             <IconSearchContainer
               loading={loading}
               data={typeof data !== "undefined" && data.length > 0}
+              error={error}
             >
               <svg className="svg-icon" viewBox="0 0 20 20">
                 <path
@@ -226,6 +269,18 @@ function Search({ search, setInfo }) {
                 ></path>
               </svg>
             </IconSearchContainer>
+            <IconLoadingContainer loading={loading}>
+              <svg
+                version="1.1"
+                viewBox="0 0 128 128"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g>
+                  <path d="M96.1,103.6c-10.4,8.4-23.5,12.4-36.8,11.1c-10.5-1-20.3-5.1-28.2-11.8H44v-8H18v26h8v-11.9c9.1,7.7,20.4,12.5,32.6,13.6   c1.9,0.2,3.7,0.3,5.5,0.3c13.5,0,26.5-4.6,37-13.2c19.1-15.4,26.6-40.5,19.1-63.9l-7.6,2.4C119,68.6,112.6,90.3,96.1,103.6z" />
+                  <path d="M103,19.7c-21.2-18.7-53.5-20-76.1-1.6C7.9,33.5,0.4,58.4,7.7,81.7l7.6-2.4C9,59.2,15.5,37.6,31.9,24.4   C51.6,8.4,79.7,9.6,98,26H85v8h26V8h-8V19.7z" />
+                </g>
+              </svg>
+            </IconLoadingContainer>
             <IconErrorContainer error={error}>
               <span>!</span>
             </IconErrorContainer>
