@@ -32,16 +32,20 @@ export const Container = styled.article`
   }
 `;
 
-const ImageContainer = styled.figure`
+const ImageContainer = styled.div`
+  border: 20px solid white;
+  border-left: 15px solid white;
+  border-right: 15px solid white;
+  position: relative;
+`;
+
+const BusinessMainImage = styled.figure`
   display: flex;
   justify-content: center;
   overflow: hidden;
-  height: 100%;
   align-items: center;
-  height: 150px;
-  margin: 20px 15px;
   border-radius: 5px;
-  position: relative;
+  height: 150px;
 `;
 
 const Image = styled.img`
@@ -81,7 +85,7 @@ const Rating = styled.div`
   align-items: center;
   flex-wrap: wrap;
   flex: 0 0 43px;
-  justify-content: space-around;
+  justify-content: center;
   svg {
     width: 20px;
     height: 20px;
@@ -111,7 +115,6 @@ const Actions = styled.div`
     width: 18px;
     height: 18px;
     fill: ${(props) => props.theme.main};
-    margin-right: 2px;
   }
 `;
 const Phone = styled.a`
@@ -185,7 +188,11 @@ function Card({ item }) {
   return (
     <Container>
       <ImageContainer>
-        {!isNil(photos) && <Image src={photos[0]} alt={`${name} main photo`} />}
+        <BusinessMainImage>
+          {!isNil(photos) && (
+            <Image src={photos[0]} alt={`${name} main photo`} />
+          )}
+        </BusinessMainImage>
       </ImageContainer>
 
       <Save onClick={() => console.log("oh weee")}></Save>
@@ -209,7 +216,7 @@ function Card({ item }) {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
-              viewBox="0 0 225 386.25"
+              viewBox="0 0 350 386.25"
               x="0px"
               y="0px"
               fillRule="evenodd"
