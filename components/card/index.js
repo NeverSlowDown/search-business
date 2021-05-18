@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { isNil } from "ramda";
+import { Link } from "next/link";
+import { useRouter } from "next/router";
 
 export const Container = styled.article`
   display: flex;
@@ -185,9 +187,18 @@ const openAddress = (search) => {
 
 function Card({ item }) {
   const { name, id, rating, photos, review_count, location, phone } = item;
+  const router = useRouter();
+
   return (
     <Container>
-      <ImageContainer>
+      <ImageContainer
+        onClick={() => {
+          router.push({
+            pathname: "/business/[id]",
+            query: { id },
+          });
+        }}
+      >
         <BusinessMainImage>
           {!isNil(photos) && (
             <Image src={photos[0]} alt={`${name} main photo`} />
