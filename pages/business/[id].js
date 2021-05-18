@@ -57,7 +57,7 @@ const ContactNumber = styled.div``;
 const Phone = styled.a``;
 
 const Rating = styled.div`
-  position: absolute;
+  position: ${(props) => (props.static ? "static" : "absolute")};
   right: 0;
   bottom: 0;
   font-weight: 400;
@@ -194,7 +194,7 @@ function BusinessDetail({ businessList }) {
           {reviews.map((review, index) => {
             return (
               <ReviewItem key={`review-${index}`}>
-                <Rating>
+                <Rating static>
                   {review.rating}
                   <svg className="svg-icon" viewBox="0 0 20 20">
                     <path
