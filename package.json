@@ -10,6 +10,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.18",
     "graphql": "^15.5.0",
+    "moment": "^2.29.1",
     "next": "10.2.0",
     "next-redux-wrapper": "^6.0.2",
     "ramda": "^0.27.1",

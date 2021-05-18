@@ -36,6 +36,7 @@ export const GET_BUSINESS_DETAILS_PARTIAL = gql`
         text
         rating
       }
+      price
     }
   }
 `;
@@ -65,6 +66,7 @@ export const GET_BUSINESS_DETAILS_FULL = gql`
         text
         rating
       }
+      price
     }
   }
 `;
