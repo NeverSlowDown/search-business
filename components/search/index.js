@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setSearchLocation, setBusinesses } from "../../redux/actions/main";
 import styled from "styled-components";
-
+import { isNil } from "ramda";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_LOCATION_BUSINESSES } from "./searchBusinessesQuery.js";
 
@@ -217,7 +217,7 @@ function Search({ location, setSearchLocation, setBusinesses }) {
   };
 
   useEffect(() => {
-    if (typeof data !== "undefined" && data.search.total > 0) {
+    if (!isNil(data) && data.search.total > 0) {
       setBusinesses(data.search.business);
     }
   }, [data]);
@@ -245,7 +245,7 @@ function Search({ location, setSearchLocation, setBusinesses }) {
             {/* We could handle icons by importing them from a separate file, but for now I take this way */}
             <IconSearchContainer
               loading={loading}
-              data={typeof data !== "undefined" && data.search.total > 0}
+              data={!isNil(data) && data.search.total > 0}
               error={error}
             >
               <svg className="svg-icon" viewBox="0 0 20 20">

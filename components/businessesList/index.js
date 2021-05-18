@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { connect } from "react-redux";
 import { setSearchLocation } from "../../redux/actions/main";
 import styled from "styled-components";
@@ -32,11 +31,6 @@ const List = styled.ul`
   grid-auto-rows: minmax(min-content, max-content);
 `;
 
-const Item = styled.li`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Title = styled.h1`
   font-size: 1.25em;
   font-weight: 700;
@@ -68,7 +62,7 @@ const mapDispatchToProps = {
 };
 
 BusinessesList.propTypes = {
-  businessList: PropTypes.shape({
+  businessList: PropTypes.arrayOf({
     name: PropTypes.string,
     id: PropTypes.string,
     alias: PropTypes.string,

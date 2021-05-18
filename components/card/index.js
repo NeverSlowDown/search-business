@@ -186,7 +186,7 @@ const openAddress = (search) => {
 };
 
 function Card({ item }) {
-  const { name, id, rating, photos, review_count, location, phone } = item;
+  const { name, rating, photos, review_count, location, phone, alias } = item;
   const router = useRouter();
 
   return (
@@ -195,7 +195,7 @@ function Card({ item }) {
         onClick={() => {
           router.push({
             pathname: "/business/[id]",
-            query: { id },
+            query: { id: alias },
           });
         }}
       >
