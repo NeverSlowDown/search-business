@@ -149,7 +149,7 @@ const Seen = styled.div`
   position: absolute;
   right: 20px;
   top: 24px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -162,12 +162,24 @@ const Seen = styled.div`
   justify-content: center;
   svg {
     path {
-      fill: white
+      fill: white;
     }
     width: 24px;
     fill: black;
     position: relative;
     top: 2px;
+  }
+  animation: fadeIn 0.5s ease;
+  @keyframes fadeIn {
+    0% {
+      transform: scale(0.7);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 `;
 
@@ -181,7 +193,6 @@ function Card({ item, setBusinessSeen }) {
   const router = useRouter();
 
   const handleSeen = (item) => {
-    console.log(item.id);
     setBusinessSeen(item.id);
   };
 
@@ -190,7 +201,6 @@ function Card({ item, setBusinessSeen }) {
       <ImageContainer
         onClick={() => {
           handleSeen(item);
-
           router.push({
             pathname: "/business/[id]",
             query: { id: alias },
@@ -297,7 +307,9 @@ Card.propTypes = {
   }),
 };
 
-const mapStateToProps = (state) => { };
+const mapStateToProps = (state) => {
+  return {};
+};
 
 const mapDispatchToProps = {
   setBusinessSeen,

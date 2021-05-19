@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -19,7 +18,8 @@ import { openAddress } from "../../components/card/index";
 const BusinessDetailContainer = styled.section``;
 
 const MainHeader = styled.header`
-  position: relative;
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: flex-end;
 `;
@@ -34,13 +34,12 @@ const ImageContainer = styled.figure`
   filter: ${(props) =>
     props.isClosed ? " grayscale(1) brightness(0.6)" : "brightness(0.6)"};
   width: 100%;
-  background: url(${(props) => props.src}) no-repeat bottom center;
-  background-attachment: fixed;
+  background: url(${(props) => props.src}) no-repeat center;
   background-size: cover;
 `;
 
 const Name = styled.h1`
-  font-size: 3em;
+  font-size: 2.5em;
   color: white;
   position: absolute;
   z-index: 1;
@@ -241,6 +240,8 @@ function BusinessDetail({ businessList }) {
   const router = useRouter();
   const { id } = router.query;
 
+  const [businessReviews, setBusinessReviews] = useState();
+
   const [businessInformation, setBusinessInformation] = useState({
     hours: "",
     is_closed: "",
@@ -284,17 +285,31 @@ function BusinessDetail({ businessList }) {
       : GET_BUSINESS_DETAILS_PARTIAL
   );
 
+  // const getReviews = async (id) => {
+  //   try {
+  //     const result = await fetch(
+  //       "https://cors-anywhere.herokuapp.com/https://www.reviewsmaker.com/api/public/yelp?url=https://www.yelp.com/biz/" +
+  //       id
+  //     );
+  //     setBusinessReviews(result.reviews);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
   useEffect(() => {
-    console.log({ id });
     getBusinessDetails({ variables: { id } });
-    // javascript fetch to get the first 5 reviews from this api:
+
+    // this is the solution for other reviews
+    // You can get reviews from this api because Yelp only provides 3... :
     // https://www.reviewsmaker.com/api/demo/yelp/
+    // getReviews(id);
   }, [id]);
 
   useEffect(() => {
     if (!isNil(data)) {
       setBusinessInformation(data.business);
-      getPricesCost(data.business.price);
+      !isNil(data.business.price) && getPricesCost(data.business.price);
     }
   }, [data]);
 
@@ -310,8 +325,6 @@ function BusinessDetail({ businessList }) {
     reviews,
     price,
   } = businessInformation;
-
-  console.log({ reviews, hours });
 
   const isClosed = !isNil(hours[0]) && !hours[0].is_open_now;
   const isPermanentClosed = is_closed;
@@ -385,12 +398,11 @@ function BusinessDetail({ businessList }) {
           </ItemDescription>
         </HalfWrapper>
         {/* ATTENTION: one problem of Yelp API is that when it returns the times for the business it doesn't clarify the TIMEZONE, so I can't parse it with moment to the current timezone. You can check this when you see the hours of the place but it is not currently open. */}
-        <ItemDescription>
-          <ItemDescriptionTitle>Hours available:</ItemDescriptionTitle>
-          <HoursList>
-            {!isNil(hours) &&
-              !isNil(hours[0]) &&
-              hours[0].open.map((days, index) => {
+        {!isNil(hours) && !isNil(hours[0]) && (
+          <ItemDescription>
+            <ItemDescriptionTitle>Hours available:</ItemDescriptionTitle>
+            <HoursList>
+              {hours[0].open.map((days, index) => {
                 return (
                   <HoursItem key={`hours-${index}`}>
                     <WeekDay>{moment.weekdays(index + 1)}</WeekDay>
@@ -403,15 +415,37 @@ function BusinessDetail({ businessList }) {
                   </HoursItem>
                 );
               })}
-          </HoursList>
-        </ItemDescription>
-
+            </HoursList>
+          </ItemDescription>
+        )}
         {!isNil(cost) && (
           <ItemDescription>
             <ItemDescriptionTitle>Cost of prices</ItemDescriptionTitle>
             {cost}
           </ItemDescription>
         )}
+
+        {/* other reviews */}
+        {/* {!isNil(businessReviews) && !isEmpty(businessReviews) && (
+          <Reviews>
+            {businessReviews.map((review, index) => {
+              return (
+                <ReviewItem key={`review-${index}`}>
+                  <Rating static>
+                    {review.rating}
+                    <svg className="svg-icon" viewBox="0 0 20 20">
+                      <path
+                        fill="none"
+                        d="M16.85,7.275l-3.967-0.577l-1.773-3.593c-0.208-0.423-0.639-0.69-1.11-0.69s-0.902,0.267-1.11,0.69L7.116,6.699L3.148,7.275c-0.466,0.068-0.854,0.394-1,0.842c-0.145,0.448-0.023,0.941,0.314,1.27l2.871,2.799l-0.677,3.951c-0.08,0.464,0.112,0.934,0.493,1.211c0.217,0.156,0.472,0.236,0.728,0.236c0.197,0,0.396-0.048,0.577-0.143l3.547-1.864l3.548,1.864c0.18,0.095,0.381,0.143,0.576,0.143c0.256,0,0.512-0.08,0.729-0.236c0.381-0.277,0.572-0.747,0.492-1.211l-0.678-3.951l2.871-2.799c0.338-0.329,0.459-0.821,0.314-1.27C17.705,7.669,17.316,7.343,16.85,7.275z M13.336,11.754l0.787,4.591l-4.124-2.167l-4.124,2.167l0.788-4.591L3.326,8.5l4.612-0.67l2.062-4.177l2.062,4.177l4.613,0.67L13.336,11.754z"
+                      ></path>
+                    </svg>
+                  </Rating>
+                  <ReviewText>{review.text}</ReviewText>
+                </ReviewItem>
+              );
+            })}
+          </Reviews>
+        )} */}
 
         {!isEmpty(reviews) && !isNil(reviews) && (
           <Reviews>
@@ -440,6 +474,19 @@ function BusinessDetail({ businessList }) {
 
 const mapStateToProps = (state) => {
   return { businessList: state.main.businesses };
+};
+
+BusinessDetail.propTypes = {
+  businessList: PropTypes.arrayOf({
+    name: PropTypes.string,
+    id: PropTypes.string,
+    rating: PropTypes.number,
+    photos: PropTypes.arrayOf(PropTypes.string),
+    review_count: PropTypes.number,
+    location: PropTypes.object,
+    phone: PropTypes.string,
+    seen: PropTypes.bool,
+  }),
 };
 
 export default connect(mapStateToProps)(BusinessDetail);

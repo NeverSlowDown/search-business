@@ -57,14 +57,16 @@ const mapStateToProps = (state) => {
 };
 
 BusinessesList.propTypes = {
-  businessList: PropTypes.arrayOf({
-    name: PropTypes.string,
-    id: PropTypes.string,
-    alias: PropTypes.string,
-    rating: PropTypes.number,
-    url: PropTypes.string,
-    photos: PropTypes.arrayOf(PropTypes.string),
-  }),
+  businessList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+      alias: PropTypes.string,
+      rating: PropTypes.number,
+      url: PropTypes.string,
+      photos: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
 };
 
 export default connect(mapStateToProps)(BusinessesList);
