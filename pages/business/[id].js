@@ -178,8 +178,11 @@ const Rating = styled.div`
 const ReviewText = styled.span``;
 
 const Reviews = styled.ul`
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-gap: 20px;
 `;
 
 const Address = styled.address``;
@@ -208,7 +211,14 @@ const ButtonPhone = styled(Button)`
   }
 `;
 
-const ReviewItem = styled.li``;
+const ReviewItem = styled.li`
+  border: 1px solid #b7b7b7;
+  border-radius: 5px;
+  padding: 10px 15px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 250px;
+`;
 
 const HalfWrapper = styled.div`
   display: grid;
