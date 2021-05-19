@@ -12,7 +12,7 @@ const BusinessesListContainer = styled.section`
   padding: 0 20px;
   margin: 0 10px;
   margin-top: -30px;
-  background: #fbfbfb;
+  background: #f3f8ff;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 0 10px 3px #0000002e;
   padding: 20px;

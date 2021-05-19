@@ -181,7 +181,7 @@ const Save = styled.button`
   }
 `;
 
-const openAddress = (search) => {
+export const openAddress = (search) => {
   return window.open("http://google.com/search?q=" + search);
 };
 
