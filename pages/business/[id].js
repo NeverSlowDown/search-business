@@ -143,7 +143,13 @@ const HoursTime = styled.span`
 const Phone = styled.span``;
 
 const Rating = styled.div`
-  position: ${(props) => (props.static ? "static" : "absolute")};
+  position: ${(props) => (props.static ? "relative" : "absolute")};
+
+  ${(props) =>
+    props.static &&
+    `
+    top: -2px;
+  `}
 
   ${(props) =>
     !props.static &&
@@ -157,15 +163,15 @@ const Rating = styled.div`
   `}
 
   font-weight: 400;
-  font-size: 1em;
+  font-size: ${(props) => (props.static ? "0.8em" : "1em")};
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  flex: 0 0 43px;
+  flex: ${(props) => (props.static ? "0 0 23px" : "0 0 43px")};
   justify-content: center;
   svg {
-    width: 20px;
-    height: 20px;
+    width: ${(props) => (props.static ? "14px" : "20px")};
+    height: ${(props) => (props.static ? "14px" : "20px")};
     position: relative;
     top: -1px;
     left: 1px;
@@ -175,7 +181,10 @@ const Rating = styled.div`
   }
 `;
 
-const ReviewText = styled.span``;
+const ReviewText = styled.p`
+  font-size: 0.75em;
+  font-weight: 200;
+`;
 
 const Reviews = styled.ul`
   display: grid;
@@ -212,12 +221,12 @@ const ButtonPhone = styled(Button)`
 `;
 
 const ReviewItem = styled.li`
-  border: 1px solid #b7b7b7;
+  border: 1px solid ${(props) => props.theme.secondary};
   border-radius: 5px;
   padding: 10px 15px;
   display: flex;
   flex-wrap: wrap;
-  max-width: 250px;
+  background: white;
 `;
 
 const HalfWrapper = styled.div`

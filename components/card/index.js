@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { isNil } from "ramda";
-import { Link } from "next/link";
 import { useRouter } from "next/router";
+import { setBusinessSeen } from "../../redux/actions/main";
+import { connect } from "react-redux";
 
 export const Container = styled.article`
   display: flex;
@@ -130,16 +131,6 @@ const Phone = styled.a`
   text-decoration: none;
   font-size: 0.75em;
 `;
-// const ViewMore = styled.button`
-//   background: ${(props) => props.theme.main};
-//   width: 32px;
-//   height: 32px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 50%;
-//   border: none;
-// `;
 
 const Location = styled.button`
   background: none;
@@ -152,17 +143,16 @@ const Location = styled.button`
   font-size: 0.75em;
 `;
 
-const Save = styled.button`
+const Seen = styled.div`
   border: none;
   padding: 0;
   position: absolute;
-  right: 10px;
-  top: 10px;
-  background: white;
+  right: 20px;
+  top: 24px;
+  background: rgba(0,0,0,0.7);
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  transform: 1;
   transition: 0.3s 0.3s ease;
   ${Container}:hover & {
     transform: scale(1);
@@ -171,13 +161,13 @@ const Save = styled.button`
   align-items: center;
   justify-content: center;
   svg {
-    width: 18px;
-    g {
-      fill: white;
+    path {
+      fill: white
     }
-  }
-  @media screen and (max-width: 767px) {
-    transform: scale(1);
+    width: 24px;
+    fill: black;
+    position: relative;
+    top: 2px;
   }
 `;
 
@@ -185,14 +175,22 @@ export const openAddress = (search) => {
   return window.open("http://google.com/search?q=" + search);
 };
 
-function Card({ item }) {
-  const { name, rating, photos, review_count, location, phone, alias } = item;
+function Card({ item, setBusinessSeen }) {
+  const { name, rating, photos, review_count, location, phone, alias, seen } =
+    item;
   const router = useRouter();
+
+  const handleSeen = (item) => {
+    console.log(item.id);
+    setBusinessSeen(item.id);
+  };
 
   return (
     <Container>
       <ImageContainer
         onClick={() => {
+          handleSeen(item);
+
           router.push({
             pathname: "/business/[id]",
             query: { id: alias },
@@ -206,7 +204,28 @@ function Card({ item }) {
         </BusinessMainImage>
       </ImageContainer>
 
-      <Save onClick={() => console.log("oh weee")}></Save>
+      {seen && (
+        <Seen>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 40"
+            version="1.1"
+            x="0px"
+            y="0px"
+          >
+            <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+              <path
+                d="M6.57441438,16.7074746 C7.149187,17.5974451 7.82824869,18.4880178 8.6045372,19.3160589 C10.7761923,21.6324909 13.2548024,23 16,23 C18.7451976,23 21.2238077,21.6324909 23.3954628,19.3160589 C24.1717513,18.4880178 24.850813,17.5974451 25.4255856,16.7074746 C25.5887228,16.4548751 25.7334114,16.2176303 25.8592878,16 C25.7334114,15.7823697 25.5887228,15.5451249 25.4255856,15.2925254 C24.850813,14.4025549 24.1717513,13.5119822 23.3954628,12.6839411 C21.2238077,10.3675091 18.7451976,9 16,9 C13.2548024,9 10.7761923,10.3675091 8.6045372,12.6839411 C7.82824869,13.5119822 7.149187,14.4025549 6.57441438,15.2925254 C6.41127724,15.5451249 6.26658862,15.7823697 6.14071218,16 C6.26658862,16.2176303 6.41127724,16.4548751 6.57441438,16.7074746 Z M4.10557281,15.5527864 C4.24614091,15.2716502 4.50996726,14.8026256 4.89433562,14.2074746 C5.5305005,13.2224451 6.28112631,12.2380178 7.1454628,11.3160589 C9.66130774,8.63249094 12.6201976,7 16,7 C19.3798024,7 22.3386923,8.63249094 24.8545372,11.3160589 C25.7188737,12.2380178 26.4694995,13.2224451 27.1056644,14.2074746 C27.4900327,14.8026256 27.7538591,15.2716502 27.8944272,15.5527864 C28.0351909,15.8343139 28.0351909,16.1656861 27.8944272,16.4472136 C27.7538591,16.7283498 27.4900327,17.1973744 27.1056644,17.7925254 C26.4694995,18.7775549 25.7188737,19.7619822 24.8545372,20.6839411 C22.3386923,23.3675091 19.3798024,25 16,25 C12.6201976,25 9.66130774,23.3675091 7.1454628,20.6839411 C6.28112631,19.7619822 5.5305005,18.7775549 4.89433562,17.7925254 C4.50996726,17.1973744 4.24614091,16.7283498 4.10557281,16.4472136 C3.96480906,16.1656861 3.96480906,15.8343139 4.10557281,15.5527864 Z"
+                fill="#000000"
+              />
+              <path
+                d="M16,20 C13.790861,20 12,18.209139 12,16 C12,13.790861 13.790861,12 16,12 C18.209139,12 20,13.790861 20,16 C20,18.209139 18.209139,20 16,20 Z M16,18 C17.1045695,18 18,17.1045695 18,16 C18,14.8954305 17.1045695,14 16,14 C14.8954305,14 14,14.8954305 14,16 C14,17.1045695 14.8954305,18 16,18 Z"
+                fill="#000000"
+              />
+            </g>
+          </svg>
+        </Seen>
+      )}
       <Description>
         <FirstLine>
           <Name>{name}</Name>
@@ -248,25 +267,6 @@ function Card({ item }) {
             {location.address1}
           </Location>
 
-          {/* <ViewMore>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              x="0px"
-              y="0px"
-              viewBox="0 0 28 35"
-              xmlSpace="preserve"
-            >
-              <g>
-                <g transform="translate(-2.000000, -2.000000)">
-                  <g>
-                    <path d="M3,16c0.5,0,0.9,0.4,1,0.9L4,17v9.6l8.3-8.3c0.4-0.4,1-0.4,1.4,0c0.4,0.4,0.4,0.9,0.1,1.3l-0.1,0.1     L5.4,28H15c0.5,0,0.9,0.4,1,0.9l0,0.1c0,0.5-0.4,0.9-0.9,1L15,30H3l0,0c0,0,0,0-0.1,0L3,30c-0.1,0-0.1,0-0.1,0c0,0,0,0-0.1,0     c0,0,0,0-0.1,0c0,0,0,0,0,0c0,0,0,0-0.1,0c0,0,0,0-0.1,0c0,0,0,0-0.1,0c0,0,0,0,0,0c0,0-0.1,0-0.1-0.1c0,0,0,0,0,0     c-0.1,0-0.1-0.1-0.2-0.2l0.1,0.1c0,0-0.1-0.1-0.1-0.1c0,0,0,0-0.1-0.1c0,0,0,0,0,0c0,0,0,0,0-0.1c0,0,0,0,0-0.1c0,0,0,0,0-0.1     c0,0,0,0,0,0c0,0,0,0,0-0.1c0,0,0,0,0-0.1c0,0,0,0,0,0l0,0c0,0,0,0,0-0.1l0,0V17C2,16.4,2.4,16,3,16z M29,2L29,2     C29,2,29.1,2,29,2L29,2c0.1,0,0.1,0,0.1,0c0,0,0,0,0.1,0c0,0,0,0,0.1,0c0,0,0,0,0,0c0,0,0,0,0.1,0c0,0,0,0,0.1,0c0,0,0,0,0.1,0     c0,0,0,0,0,0c0,0,0.1,0,0.1,0.1c0,0,0,0,0,0c0.1,0,0.1,0.1,0.2,0.2l-0.1-0.1c0,0,0.1,0.1,0.1,0.1c0,0,0,0,0.1,0.1c0,0,0,0,0,0     c0,0,0,0,0,0.1c0,0,0,0,0,0.1c0,0,0,0,0,0.1c0,0,0,0,0,0c0,0,0,0,0,0.1c0,0,0,0,0,0.1c0,0,0,0,0,0l0,0c0,0,0,0,0,0.1l0,0v12     c0,0.6-0.4,1-1,1c-0.5,0-0.9-0.4-1-0.9l0-0.1V5.4l-8.3,8.3c-0.4,0.4-1,0.4-1.4,0c-0.4-0.4-0.4-0.9-0.1-1.3l0.1-0.1L26.6,4H17     c-0.5,0-0.9-0.4-1-0.9L16,3c0-0.5,0.4-0.9,0.9-1L17,2H29z" />
-                  </g>
-                </g>
-              </g>
-            </svg>
-          </ViewMore> */}
-
           <Phone href={`tel:${phone}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -297,4 +297,10 @@ Card.propTypes = {
   }),
 };
 
-export default Card;
+const mapStateToProps = (state) => { };
+
+const mapDispatchToProps = {
+  setBusinessSeen,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

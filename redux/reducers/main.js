@@ -1,3 +1,4 @@
+import { indexOf } from "ramda";
 import * as t from "../types";
 
 const main = (
@@ -19,6 +20,21 @@ const main = (
         businesses: action.payload,
       };
 
+    case t.SET_BUSINESS_SEEN: {
+      const list = [...state.businesses];
+      const element = list.find((item) => item.id === action.payload);
+      const indexOfElement = indexOf(element, list);
+      let newBusinesses = [...state.businesses];
+      newBusinesses[indexOfElement] = {
+        ...element,
+        seen: true,
+      }
+
+      return {
+        ...state,
+        businesses: newBusinesses,
+      };
+    }
     default:
       return { ...state };
   }

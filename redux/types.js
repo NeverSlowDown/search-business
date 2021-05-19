@@ -1,2 +1,3 @@
 export const SET_SEARCH = "SET_SEARCH";
 export const SET_BUSINESSES = "SET_BUSINESSES";
+export const SET_BUSINESS_SEEN = "SET_BUSINESS_SEEN";

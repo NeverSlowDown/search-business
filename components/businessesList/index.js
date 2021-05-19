@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { setSearchLocation } from "../../redux/actions/main";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { isNil } from "ramda";
@@ -57,10 +56,6 @@ const mapStateToProps = (state) => {
   return { location: state.main.location, businessList: state.main.businesses };
 };
 
-const mapDispatchToProps = {
-  setSearchLocation,
-};
-
 BusinessesList.propTypes = {
   businessList: PropTypes.arrayOf({
     name: PropTypes.string,
@@ -72,4 +67,4 @@ BusinessesList.propTypes = {
   }),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessesList);
+export default connect(mapStateToProps)(BusinessesList);

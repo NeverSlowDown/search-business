@@ -13,3 +13,10 @@ export const setBusinesses = (name) => (dispatch) => {
     payload: name,
   });
 };
+
+export const setBusinessSeen = (name) => (dispatch) => {
+  dispatch({
+    type: t.SET_BUSINESS_SEEN,
+    payload: name,
+  });
+};
