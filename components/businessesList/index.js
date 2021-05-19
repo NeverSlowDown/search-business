@@ -24,7 +24,7 @@ const List = styled.ul`
   width: 100%;
   margin-top: 40px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 320px);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-gap: 20px;
   justify-content: space-around;
   grid-auto-rows: minmax(min-content, max-content);
@@ -38,7 +38,10 @@ const Title = styled.h1`
 function BusinessesList({ location, businessList }) {
   return (
     <BusinessesListContainer>
-      <Title>Latest search in {location}</Title>
+      <Title>
+        {" "}
+        {location ? "Latest search in " : "Try Search Businesses!"} {location}
+      </Title>
       <List>
         {!isNil(businessList) ? (
           businessList.map((item) => {

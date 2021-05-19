@@ -64,6 +64,9 @@ const Content = styled.div`
   flex-direction: column;
   z-index: 3;
   align-items: center;
+  max-width: 350px;
+  top: 15vh;
+  left: calc(50% - 350px / 2);
 `;
 
 const Label = styled.label`
@@ -222,8 +225,23 @@ function Search({ location, setSearchLocation, setBusinesses }) {
   useEffect(() => {
     if (!isNil(data) && data.search.total > 0) {
       setBusinesses(data.search.business);
+      localStorage.setItem("business", JSON.stringify(data.search.business));
+      localStorage.setItem("location", JSON.stringify(activeLocation));
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!isNil(localStorage.getItem("business"))) {
+      const loadInitialData = JSON.parse(localStorage.getItem("business"));
+      setBusinesses(loadInitialData);
+    }
+
+    if (!isNil(localStorage.getItem("location"))) {
+      const loadInitialLocation = JSON.parse(localStorage.getItem("location"));
+      setSearchLocation(loadInitialLocation);
+      setActiveLocation(loadInitialLocation);
+    }
+  }, []);
 
   return (
     <SearchContainer>

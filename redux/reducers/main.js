@@ -3,7 +3,7 @@ import * as t from "../types";
 
 const main = (
   state = {
-    location: "miami",
+    location: "",
   },
   action
 ) => {
@@ -28,7 +28,7 @@ const main = (
       newBusinesses[indexOfElement] = {
         ...element,
         seen: true,
-      }
+      };
 
       return {
         ...state,
