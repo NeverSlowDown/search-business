@@ -34,10 +34,9 @@ const ItemDescriptionImage = styled.figure`
   overflow: hidden;
   height: 120px;
   margin-bottom: 20px;
-  background: url(${(props) => props.src}) no-repeat center;
+  background: url(${(props) => props.src}) no-repeat top center;
   background-size: cover;
   width: 100%;
-  background-attachment: fixed;
   img {
     width: 100%;
   }
