@@ -1,22 +1,15 @@
-import { connect } from "react-redux";
 import Search from "../components/search";
 import BusinessesList from "../components/businessesList";
-import Nav from "../components/nav";
-import Footer from "../components/footer";
 
-function Home({ search }) {
+function Home() {
   return (
     <>
-      {/* <Nav /> */}
+      {/* no need of nav */}
       <Search />
       <BusinessesList />
-      {/* <Footer /> */}
+      {/* no need of footer */}
     </>
   );
 }
 
-const mapStateToProps = (state) => {
-  return { search: state.main.search };
-};
-
-export default connect(mapStateToProps)(Home);
+export default Home;

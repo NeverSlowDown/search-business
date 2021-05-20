@@ -205,7 +205,7 @@ const IconErrorContainer = styled.div`
     }
   }
 `;
-function Search({ location, setSearchLocation, setBusinesses }) {
+function Search({ location, setSearchLocation, setBusinesses, businessList }) {
   const [activeLocation, setActiveLocation] = useState(location || "");
   const [activeTerm, setActiveTerm] = useState("");
   const [searchBusinesses, { data, loading, error }] = useLazyQuery(
@@ -228,7 +228,7 @@ function Search({ location, setSearchLocation, setBusinesses }) {
   }, [data]);
 
   useEffect(() => {
-    if (!isNil(localStorage.getItem("business"))) {
+    if (!isNil(localStorage.getItem("business")) && isNil(businessList)) {
       const loadInitialData = JSON.parse(localStorage.getItem("business"));
       setBusinesses(loadInitialData);
     }
@@ -307,7 +307,7 @@ function Search({ location, setSearchLocation, setBusinesses }) {
 }
 
 const mapStateToProps = (state) => {
-  return { location: state.main.location };
+  return { location: state.main.location, businessList: state.main.businesses };
 };
 
 const mapDispatchToProps = {

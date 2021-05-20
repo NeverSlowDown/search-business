@@ -6,23 +6,25 @@ import { useEffect, useState } from "react";
 import { isEmpty, isNil } from "ramda";
 import { useLazyQuery } from "@apollo/client";
 import moment from "moment";
-import Image from "next/image";
-
-// change location of search business query
 import {
   GET_BUSINESS_DETAILS_PARTIAL,
   GET_BUSINESS_DETAILS_FULL,
 } from "../../components/search/searchBusinessesQuery";
 
 import { openAddress } from "../../components/card/index";
+import CardSkeleton from "./skeleton";
+import Link from "next/link";
+
+// styled components can also be in a separated file and then imported here but most of the time when the component is small I found it better to be here.
 
 const BusinessDetailContainer = styled.section``;
 
-const MainHeader = styled.header`
+export const MainHeader = styled.header`
   position: sticky;
   top: 0;
   display: flex;
   align-items: flex-end;
+  min-height: 40vh;
 `;
 
 const ItemDescriptionImage = styled.figure`
@@ -57,6 +59,7 @@ const ImageContainer = styled.figure`
 
 const Name = styled.h1`
   font-size: 2.5em;
+  padding: 0 10px;
   color: white;
   position: absolute;
   z-index: 1;
@@ -75,7 +78,7 @@ const Name = styled.h1`
 const IsClosed = styled.div`
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 50px;
   background: ${(props) =>
     props.permanent ? "#ff3838" : props.theme.secondary};
   color: white;
@@ -85,7 +88,7 @@ const IsClosed = styled.div`
   font-size: 0.75em;
 `;
 
-const Description = styled.article`
+export const Description = styled.article`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
@@ -112,7 +115,6 @@ const ItemDescription = styled.article`
   padding-bottom: 20px;
   border-radius: 5px;
   position: relative;
-  /* max-width: 320px; */
   &:hover {
     box-shadow: 0px 6px 16px 0px #0000002e;
   }
@@ -125,6 +127,7 @@ const ItemDescriptionTitle = styled.h2`
   font-size: 0.6em;
   text-transform: uppercase;
   margin-bottom: 15px;
+  margin-top: 10px;
 `;
 
 const HoursList = styled.ul`
@@ -137,7 +140,6 @@ const HoursList = styled.ul`
 
 const HoursItem = styled.li`
   display: flex;
-  margin-right: 20px;
   &:not(:first-child) {
     margin-top: 5px;
   }
@@ -155,24 +157,21 @@ const Phone = styled.span``;
 
 const Rating = styled.div`
   position: ${(props) => (props.static ? "relative" : "absolute")};
-
   ${(props) =>
     props.static &&
     `
     top: -2px;
   `}
-
   ${(props) =>
     !props.static &&
     `
     right: 20px;
-    top: 50px;
+    top: 20px;
     background: #00000085;
     padding: 2px 10px;
     border-radius: 5px;
     color: white;
   `}
-
   font-weight: 400;
   font-size: ${(props) => (props.static ? "0.8em" : "1em")};
   display: flex;
@@ -266,11 +265,34 @@ const ReviewItem = styled.li`
   }
 `;
 
+const GoBackButton = styled.button`
+  border: none;
+  display: flex;
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  z-index: 1;
+  background: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  svg {
+    width: 32px;
+    height: 32px;
+    path {
+      fill: white;
+    }
+  }
+`;
+
 function BusinessDetail({ businessList }) {
   const router = useRouter();
   const { id } = router.query;
 
-  const [businessReviews, setBusinessReviews] = useState();
+  // const [businessReviews, setBusinessReviews] = useState();
 
   const [businessInformation, setBusinessInformation] = useState({
     hours: "",
@@ -343,27 +365,28 @@ function BusinessDetail({ businessList }) {
     }
   }, [data]);
 
-  const {
-    hours,
-    is_closed,
-    location,
-    name,
-    phone,
-    photos,
-    rating,
-    review_count,
-    reviews,
-    price,
-  } = businessInformation;
+  const { hours, is_closed, location, name, phone, photos, rating, reviews } =
+    businessInformation;
 
   const isClosed = !isNil(hours[0]) && !hours[0].is_open_now;
   const isPermanentClosed = is_closed;
 
-  console.log({ phone });
-
-  return (
+  return loading ? (
+    <CardSkeleton />
+  ) : (
     <BusinessDetailContainer>
       <MainHeader>
+        <GoBackButton>
+          {/* I don't use router.back just in case the user only got into this page due to a shared link */}
+          <Link href="/">
+            <svg className="svg-icon" viewBox="0 0 20 20">
+              <path
+                fill="none"
+                d="M8.388,10.049l4.76-4.873c0.303-0.31,0.297-0.804-0.012-1.105c-0.309-0.304-0.803-0.293-1.105,0.012L6.726,9.516c-0.303,0.31-0.296,0.805,0.012,1.105l5.433,5.307c0.152,0.148,0.35,0.223,0.547,0.223c0.203,0,0.406-0.08,0.559-0.236c0.303-0.309,0.295-0.803-0.012-1.104L8.388,10.049z"
+              ></path>
+            </svg>
+          </Link>
+        </GoBackButton>
         <Name>{name}</Name>
         {isPermanentClosed && <IsClosed permanent>Permanently Closed</IsClosed>}
         {isClosed && <IsClosed>Closed</IsClosed>}
@@ -382,34 +405,36 @@ function BusinessDetail({ businessList }) {
         </Rating>
       </MainHeader>
       <Description>
-        <ItemDescription onClick={() => openAddress(location.address1)}>
-          <ItemDescriptionImage src="/address.jpg" />
-          <ItemDescriptionTitle>Address:</ItemDescriptionTitle>
-          <Address>{location.address1}</Address>
-          <ButtonLocation>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              version="1.1"
-              viewBox="0 0 350 386.25"
-              x="0px"
-              y="0px"
-              fillRule="evenodd"
-              clipRule="evenodd"
-            >
-              <defs></defs>
-              <g>
-                <path
-                  className="fil0"
-                  d="M113 0c62,0 112,50 112,113 0,64 -52,161 -107,194 -4,2 -8,2 -11,0 -55,-37 -107,-128 -107,-194 0,-63 50,-113 113,-113zm0 20c-51,0 -93,42 -93,93 0,59 46,139 93,174 46,-33 92,-118 92,-174 0,-51 -41,-93 -92,-93z"
-                />
-                <path
-                  className="fil0"
-                  d="M113 69c24,0 44,19 44,44 0,24 -20,44 -44,44 -25,0 -44,-20 -44,-44 0,-25 19,-44 44,-44zm0 20c-14,0 -24,10 -24,24 0,13 10,24 24,24 13,0 24,-11 24,-24 0,-14 -11,-24 -24,-24z"
-                />
-              </g>
-            </svg>
-          </ButtonLocation>
-        </ItemDescription>
+        {!isNil(location.address1) && (
+          <ItemDescription onClick={() => openAddress(location.address1)}>
+            <ItemDescriptionImage src="/address.jpg" />
+            <ItemDescriptionTitle>Address:</ItemDescriptionTitle>
+            <Address>{location.address1}</Address>
+            <ButtonLocation>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                version="1.1"
+                viewBox="0 0 350 386.25"
+                x="0px"
+                y="0px"
+                fillRule="evenodd"
+                clipRule="evenodd"
+              >
+                <defs></defs>
+                <g>
+                  <path
+                    className="fil0"
+                    d="M113 0c62,0 112,50 112,113 0,64 -52,161 -107,194 -4,2 -8,2 -11,0 -55,-37 -107,-128 -107,-194 0,-63 50,-113 113,-113zm0 20c-51,0 -93,42 -93,93 0,59 46,139 93,174 46,-33 92,-118 92,-174 0,-51 -41,-93 -92,-93z"
+                  />
+                  <path
+                    className="fil0"
+                    d="M113 69c24,0 44,19 44,44 0,24 -20,44 -44,44 -25,0 -44,-20 -44,-44 0,-25 19,-44 44,-44zm0 20c-14,0 -24,10 -24,24 0,13 10,24 24,24 13,0 24,-11 24,-24 0,-14 -11,-24 -24,-24z"
+                  />
+                </g>
+              </svg>
+            </ButtonLocation>
+          </ItemDescription>
+        )}
 
         {!isNil(phone) && !isEmpty(phone) && (
           <ItemDescription>
