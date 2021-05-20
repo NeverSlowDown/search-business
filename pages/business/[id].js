@@ -92,13 +92,17 @@ export const Description = styled.article`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 20px;
   padding: 20px;
-  background: #f3f8ff;
+  background: #ffffff;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 0 10px 3px #0000002e;
   margin-top: -30px;
   min-height: calc(60vh + 30px);
   position: relative;
   align-items: flex-start;
+
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const ItemDescription = styled.article`
@@ -216,12 +220,16 @@ const Button = styled.button`
   justify-content: center;
   border: none;
   margin: 10px 0;
-
+  cursor: pointer;
   position: absolute;
   top: 110px;
   margin: 0;
   width: 38px;
   height: 38px;
+  transition: 0.3s ease;
+  &:hover {
+    opacity: 0.8;
+  }
   svg {
     width: 28px;
     height: 28px;

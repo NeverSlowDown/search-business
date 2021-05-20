@@ -20,6 +20,9 @@ const BusinessesListContainer = styled.section`
   margin-top: 150px;
   @media screen and (min-width: 971px) {
     margin-top: -50px;
+    max-width: 1050px;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
