@@ -8,20 +8,16 @@ import { SEARCH_LOCATION_BUSINESSES } from "./searchBusinessesQuery.js";
 
 const Input = styled.input`
   display: flex;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.7);
-  margin: 10px 0;
   padding-right: 36px;
 `;
 
 const SearchContainer = styled.section`
   display: flex;
-  min-height: calc(50vh + 30px);
-  border-radius: 0 0 20px 20px;
-  overflow: hidden;
-  position: sticky;
+  min-height: 30vh;
+  position: relative;
   top: 0;
 `;
 
@@ -33,6 +29,9 @@ const BackgroundImage = styled.figure`
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 0 0 50px 50px;
+
+  overflow: hidden;
   img {
     width: 100%;
     opacity: 1;
@@ -47,42 +46,51 @@ const BackgroundColor = styled.div`
   width: 100%;
   background: linear-gradient(
     360deg,
-    ${(props) => props.theme.secondary} 0%,
-    ${(props) => props.theme.secondary} 50%,
-    rgba(255, 211, 56, 1) 100%
+    ${(props) => props.theme.main} 0%,
+    ${(props) => props.theme.main} 70%,
+    rgba(255, 255, 255, 0.3) 100%
   );
-  opacity: 0.7;
+  background-attachment: fixed;
+  overflow: hidden;
+  border-radius: 0 0 50px 50px;
 `;
 
 const Content = styled.div`
   position: absolute;
-  height: 100%;
   width: 100%;
   display: flex;
   padding: 20px 20px;
-  color: white;
   flex-direction: column;
   z-index: 3;
   align-items: center;
-  max-width: 350px;
-  top: 15vh;
-  left: calc(50% - 350px / 2);
+  max-width: 320px;
+  top: 150px;
+  left: calc(50% - 320px / 2);
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 3px #0000002e;
 `;
 
 const Label = styled.label`
-  font-size: 1em;
+  font-size: 0.75em;
   font-weight: 700;
   align-self: flex-start;
+  margin-left: 5px;
+  margin-bottom: 5px;
 `;
 
 const InputContainer = styled.div`
   position: relative;
-  width: ${(props) => (props.loading ? 13 : 100)}%;
+  width: 100%;
+  /* width: ${(props) => (props.loading ? 13 : 100)}%; */
   display: flex;
   transition: 0.5s ease;
   flex-direction: column;
   justify-content: center;
-  animation: ${(props) => (props.error ? "errorInput 2s ease" : "none")};
+  &:first-of-type {
+    margin-bottom: 10px;
+  }
+  /* animation: ${(props) => (props.error ? "errorInput 2s ease" : "none")};
 
   @keyframes errorInput {
     0% {
@@ -94,25 +102,27 @@ const InputContainer = styled.div`
     100% {
       width: 100%;
     }
-  }
+  } */
 `;
 
 const ButtonIconSave = styled.button`
-  position: absolute;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 150px;
+  height: 40px;
   border: none;
-  color: transparent;
+  color: ${(props) => (props.loading ? "transparent" : "white")};
   background: ${(props) => props.theme.main};
   display: flex;
   align-items: center;
   justify-content: center;
   right: 5px;
   overflow: hidden;
-
+  position: relative;
+  margin-top: 20px;
   animation: ${(props) => (props.error ? "error 1.5s ease" : "none")};
-
+  max-width: ${(props) => (props.loading ? 50 : 150)}px;
+  transition: 0.5s ease max-width;
   @keyframes error {
     0% {
       background: ${(props) => props.theme.main};
@@ -136,8 +146,9 @@ const ButtonIconSave = styled.button`
 
 const IconSearchContainer = styled.div`
   transform: translateY(${(props) => (props.loading ? -30 : 0)}px);
-  position: absolute;
   transition: 0.5s ease;
+  margin-right: -15px;
+  margin-left: 5px;
   svg {
     transform: rotate(-65deg);
     margin-left: 1px;
@@ -261,37 +272,6 @@ function Search({ location, setSearchLocation, setBusinesses }) {
             value={activeLocation}
             onChange={(e) => setActiveLocation(e.target.value)}
           />
-          <ButtonIconSave error={error} onClick={handleSearch}>
-            Search
-            {/* We could handle icons by importing them from a separate file, but for now I take this way */}
-            <IconSearchContainer
-              loading={loading}
-              data={!isNil(data) && data.search.total > 0}
-              error={error}
-            >
-              <svg className="svg-icon" viewBox="0 0 20 20">
-                <path
-                  fill="none"
-                  d="M12.323,2.398c-0.741-0.312-1.523-0.472-2.319-0.472c-2.394,0-4.544,1.423-5.476,3.625C3.907,7.013,3.896,8.629,4.49,10.102c0.528,1.304,1.494,2.333,2.72,2.99L5.467,17.33c-0.113,0.273,0.018,0.59,0.292,0.703c0.068,0.027,0.137,0.041,0.206,0.041c0.211,0,0.412-0.127,0.498-0.334l1.74-4.23c0.583,0.186,1.18,0.309,1.795,0.309c2.394,0,4.544-1.424,5.478-3.629C16.755,7.173,15.342,3.68,12.323,2.398z M14.488,9.77c-0.769,1.807-2.529,2.975-4.49,2.975c-0.651,0-1.291-0.131-1.897-0.387c-0.002-0.004-0.002-0.004-0.002-0.004c-0.003,0-0.003,0-0.003,0s0,0,0,0c-1.195-0.508-2.121-1.452-2.607-2.656c-0.489-1.205-0.477-2.53,0.03-3.727c0.764-1.805,2.525-2.969,4.487-2.969c0.651,0,1.292,0.129,1.898,0.386C14.374,4.438,15.533,7.3,14.488,9.77z"
-                ></path>
-              </svg>
-            </IconSearchContainer>
-            <IconLoadingContainer loading={loading}>
-              <svg
-                version="1.1"
-                viewBox="0 0 128 128"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g>
-                  <path d="M96.1,103.6c-10.4,8.4-23.5,12.4-36.8,11.1c-10.5-1-20.3-5.1-28.2-11.8H44v-8H18v26h8v-11.9c9.1,7.7,20.4,12.5,32.6,13.6   c1.9,0.2,3.7,0.3,5.5,0.3c13.5,0,26.5-4.6,37-13.2c19.1-15.4,26.6-40.5,19.1-63.9l-7.6,2.4C119,68.6,112.6,90.3,96.1,103.6z" />
-                  <path d="M103,19.7c-21.2-18.7-53.5-20-76.1-1.6C7.9,33.5,0.4,58.4,7.7,81.7l7.6-2.4C9,59.2,15.5,37.6,31.9,24.4   C51.6,8.4,79.7,9.6,98,26H85v8h26V8h-8V19.7z" />
-                </g>
-              </svg>
-            </IconLoadingContainer>
-            <IconErrorContainer error={error}>
-              <span>!</span>
-            </IconErrorContainer>
-          </ButtonIconSave>
         </InputContainer>
         <Label htmlFor="location">Term:</Label>
         <InputContainer error={error} loading={loading}>
@@ -301,38 +281,38 @@ function Search({ location, setSearchLocation, setBusinesses }) {
             value={activeTerm}
             onChange={(e) => setActiveTerm(e.target.value)}
           />
-          <ButtonIconSave error={error} onClick={handleSearch}>
-            Search
-            {/* We could handle icons by importing them from a separate file, but for now I take this way */}
-            <IconSearchContainer
-              loading={loading}
-              data={!isNil(data) && data.search.total > 0}
-              error={error}
-            >
-              <svg className="svg-icon" viewBox="0 0 20 20">
-                <path
-                  fill="none"
-                  d="M12.323,2.398c-0.741-0.312-1.523-0.472-2.319-0.472c-2.394,0-4.544,1.423-5.476,3.625C3.907,7.013,3.896,8.629,4.49,10.102c0.528,1.304,1.494,2.333,2.72,2.99L5.467,17.33c-0.113,0.273,0.018,0.59,0.292,0.703c0.068,0.027,0.137,0.041,0.206,0.041c0.211,0,0.412-0.127,0.498-0.334l1.74-4.23c0.583,0.186,1.18,0.309,1.795,0.309c2.394,0,4.544-1.424,5.478-3.629C16.755,7.173,15.342,3.68,12.323,2.398z M14.488,9.77c-0.769,1.807-2.529,2.975-4.49,2.975c-0.651,0-1.291-0.131-1.897-0.387c-0.002-0.004-0.002-0.004-0.002-0.004c-0.003,0-0.003,0-0.003,0s0,0,0,0c-1.195-0.508-2.121-1.452-2.607-2.656c-0.489-1.205-0.477-2.53,0.03-3.727c0.764-1.805,2.525-2.969,4.487-2.969c0.651,0,1.292,0.129,1.898,0.386C14.374,4.438,15.533,7.3,14.488,9.77z"
-                ></path>
-              </svg>
-            </IconSearchContainer>
-            <IconLoadingContainer loading={loading}>
-              <svg
-                version="1.1"
-                viewBox="0 0 128 128"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g>
-                  <path d="M96.1,103.6c-10.4,8.4-23.5,12.4-36.8,11.1c-10.5-1-20.3-5.1-28.2-11.8H44v-8H18v26h8v-11.9c9.1,7.7,20.4,12.5,32.6,13.6   c1.9,0.2,3.7,0.3,5.5,0.3c13.5,0,26.5-4.6,37-13.2c19.1-15.4,26.6-40.5,19.1-63.9l-7.6,2.4C119,68.6,112.6,90.3,96.1,103.6z" />
-                  <path d="M103,19.7c-21.2-18.7-53.5-20-76.1-1.6C7.9,33.5,0.4,58.4,7.7,81.7l7.6-2.4C9,59.2,15.5,37.6,31.9,24.4   C51.6,8.4,79.7,9.6,98,26H85v8h26V8h-8V19.7z" />
-                </g>
-              </svg>
-            </IconLoadingContainer>
-            <IconErrorContainer error={error}>
-              <span>!</span>
-            </IconErrorContainer>
-          </ButtonIconSave>
         </InputContainer>
+        <ButtonIconSave loading={loading} error={error} onClick={handleSearch}>
+          Search
+          {/* We could handle icons by importing them from a separate file, but for now I take this way */}
+          <IconSearchContainer
+            loading={loading}
+            data={!isNil(data) && data.search.total > 0}
+            error={error}
+          >
+            <svg className="svg-icon" viewBox="0 0 20 20">
+              <path
+                fill="none"
+                d="M12.323,2.398c-0.741-0.312-1.523-0.472-2.319-0.472c-2.394,0-4.544,1.423-5.476,3.625C3.907,7.013,3.896,8.629,4.49,10.102c0.528,1.304,1.494,2.333,2.72,2.99L5.467,17.33c-0.113,0.273,0.018,0.59,0.292,0.703c0.068,0.027,0.137,0.041,0.206,0.041c0.211,0,0.412-0.127,0.498-0.334l1.74-4.23c0.583,0.186,1.18,0.309,1.795,0.309c2.394,0,4.544-1.424,5.478-3.629C16.755,7.173,15.342,3.68,12.323,2.398z M14.488,9.77c-0.769,1.807-2.529,2.975-4.49,2.975c-0.651,0-1.291-0.131-1.897-0.387c-0.002-0.004-0.002-0.004-0.002-0.004c-0.003,0-0.003,0-0.003,0s0,0,0,0c-1.195-0.508-2.121-1.452-2.607-2.656c-0.489-1.205-0.477-2.53,0.03-3.727c0.764-1.805,2.525-2.969,4.487-2.969c0.651,0,1.292,0.129,1.898,0.386C14.374,4.438,15.533,7.3,14.488,9.77z"
+              ></path>
+            </svg>
+          </IconSearchContainer>
+          <IconLoadingContainer loading={loading}>
+            <svg
+              version="1.1"
+              viewBox="0 0 128 128"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g>
+                <path d="M96.1,103.6c-10.4,8.4-23.5,12.4-36.8,11.1c-10.5-1-20.3-5.1-28.2-11.8H44v-8H18v26h8v-11.9c9.1,7.7,20.4,12.5,32.6,13.6   c1.9,0.2,3.7,0.3,5.5,0.3c13.5,0,26.5-4.6,37-13.2c19.1-15.4,26.6-40.5,19.1-63.9l-7.6,2.4C119,68.6,112.6,90.3,96.1,103.6z" />
+                <path d="M103,19.7c-21.2-18.7-53.5-20-76.1-1.6C7.9,33.5,0.4,58.4,7.7,81.7l7.6-2.4C9,59.2,15.5,37.6,31.9,24.4   C51.6,8.4,79.7,9.6,98,26H85v8h26V8h-8V19.7z" />
+              </g>
+            </svg>
+          </IconLoadingContainer>
+          <IconErrorContainer error={error}>
+            <span>!</span>
+          </IconErrorContainer>
+        </ButtonIconSave>
 
         {error && <p>error, please try again</p>}
       </Content>

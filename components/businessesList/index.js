@@ -10,14 +10,14 @@ const BusinessesListContainer = styled.section`
   position: relative;
   padding: 0 20px;
   margin: 0 10px;
-  margin-top: -30px;
-  background: #f3f8ff;
+  background: #ffffff;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 0 10px 3px #0000002e;
   padding: 20px;
   z-index: 2;
   flex-wrap: wrap;
   flex-direction: column;
+  margin-top: 150px;
 `;
 
 const List = styled.ul`

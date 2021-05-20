@@ -73,7 +73,7 @@ const Description = styled.article`
   /* add media for flex row here */
   flex-direction: column;
   padding: 20px;
-  background: #f3f8ff;
+  background: #ffffff;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 0 10px 3px #0000002e;
   margin-top: -30px;
