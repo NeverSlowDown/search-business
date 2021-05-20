@@ -6,7 +6,8 @@ import Card from "../card";
 
 const BusinessesListContainer = styled.section`
   display: flex;
-  min-height: 50vh;
+  min-height: calc(100vh - 450px + 50px);
+
   position: relative;
   padding: 0 20px;
   margin: 0 10px;
