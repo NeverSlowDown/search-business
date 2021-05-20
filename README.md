@@ -13,6 +13,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 [https://search-business.vercel.app/](https://search-business.vercel.app/)
 
+## Make endpoint work
+
+enter
+https://cors-anywhere.herokuapp.com/corsdemo
+
+and get temp access to the server
+
 ## Comments
 
 get 5 reviews from yelp is not possible with the official graphql yelp api

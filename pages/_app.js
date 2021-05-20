@@ -68,9 +68,9 @@ const mainTheme = {
 };
 
 const httpLink = createHttpLink({
-  uri: "https://api.yelp.com/v3/graphql",
-  // for local testing, remember check the network panel to activate the temp server
-  // uri: "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/graphql",
+  // uri: "https://api.yelp.com/v3/graphql",
+  // for testing, remember check the network panel to activate the temp server
+  uri: "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
