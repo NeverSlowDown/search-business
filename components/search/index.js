@@ -16,9 +16,13 @@ const Input = styled.input`
 
 const SearchContainer = styled.section`
   display: flex;
-  min-height: 30vh;
+  min-height: 250px;
   position: relative;
   top: 0;
+  transition: 0.3s ease;
+  @media screen and (min-width: 971px) {
+    min-height: 450px;
+  }
 `;
 
 const BackgroundImage = styled.figure`
@@ -69,6 +73,12 @@ const Content = styled.div`
   background: white;
   border-radius: 20px;
   box-shadow: 0 0 10px 3px #0000002e;
+  transition: 0.3s ease;
+  @media screen and (min-width: 971px) {
+    max-width: 550px;
+    top: 120px;
+    left: calc(50% - 550px / 2);
+  }
 `;
 
 const Label = styled.label`
@@ -91,7 +101,7 @@ const InputContainer = styled.div`
   }
 `;
 
-const ButtonIconSave = styled.button`
+const ButtonSearch = styled.button`
   border-radius: 20px;
   width: 100%;
   max-width: 150px;
@@ -109,6 +119,7 @@ const ButtonIconSave = styled.button`
   animation: ${(props) => (props.error ? "error 1.5s ease" : "none")};
   max-width: ${(props) => (props.loading ? 50 : 150)}px;
   transition: 0.5s ease max-width;
+  cursor: pointer;
   @keyframes error {
     0% {
       background: ${(props) => props.theme.main};
@@ -185,6 +196,7 @@ const IconLoadingContainer = styled.div`
 const IconErrorContainer = styled.div`
   transform: translateY(${(props) => (props.error ? 0 : 30)}px);
   position: absolute;
+  right: 50px;
   span {
     color: white;
     font-size: 1.25em;
@@ -205,6 +217,12 @@ const IconErrorContainer = styled.div`
     }
   }
 `;
+
+const ErrorMessage = styled.p`
+  font-size: 0.75em;
+  margin-top: 10px;
+`;
+
 function Search({ location, setSearchLocation, setBusinesses, businessList }) {
   const [activeLocation, setActiveLocation] = useState(location || "");
   const [activeTerm, setActiveTerm] = useState("");
@@ -268,7 +286,7 @@ function Search({ location, setSearchLocation, setBusinesses, businessList }) {
             onChange={(e) => setActiveTerm(e.target.value)}
           />
         </InputContainer>
-        <ButtonIconSave loading={loading} error={error} onClick={handleSearch}>
+        <ButtonSearch loading={loading} error={error} onClick={handleSearch}>
           Search
           {/* We could handle icons by importing them from a separate file, but for now I take this way */}
           <IconSearchContainer
@@ -298,9 +316,9 @@ function Search({ location, setSearchLocation, setBusinesses, businessList }) {
           <IconErrorContainer error={error}>
             <span>!</span>
           </IconErrorContainer>
-        </ButtonIconSave>
+        </ButtonSearch>
 
-        {error && <p>error, please try again</p>}
+        {error && <ErrorMessage>error, please try again</ErrorMessage>}
       </Content>
     </SearchContainer>
   );

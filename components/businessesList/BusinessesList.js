@@ -18,6 +18,9 @@ const BusinessesListContainer = styled.section`
   flex-wrap: wrap;
   flex-direction: column;
   margin-top: 150px;
+  @media screen and (min-width: 971px) {
+    margin-top: -50px;
+  }
 `;
 
 const List = styled.ul`
@@ -48,8 +51,8 @@ function BusinessesList({ location, businessList }) {
             return <Card item={item} key={item.id} />;
           })
         ) : (
-            <p>No results available, try search businesses</p>
-          )}
+          <p>No results available, try search businesses</p>
+        )}
       </List>
     </BusinessesListContainer>
   );
