@@ -11,7 +11,7 @@ import {
   GET_BUSINESS_DETAILS_FULL,
 } from "../../components/search/searchBusinessesQuery";
 
-import { openAddress } from "../../components/card/index";
+import { openAddress } from "../../components/card/Card";
 import CardSkeleton from "./skeleton";
 import Link from "next/link";
 
