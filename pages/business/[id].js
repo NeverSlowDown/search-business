@@ -73,7 +73,7 @@ const Description = styled.article`
   /* add media for flex row here */
   flex-direction: column;
   padding: 20px;
-  background: #ffffff;
+  background: #f3f8ff;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 0 10px 3px #0000002e;
   margin-top: -30px;
@@ -92,18 +92,11 @@ const ItemDescription = styled.article`
   background: white;
   padding: 10px;
   border-radius: 5px;
-
+  position: relative;
   &:hover {
     box-shadow: 0px 6px 16px 0px #0000002e;
   }
   background: white;
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-    position: relative;
-    top: 2px;
-  }
 `;
 
 const ItemDescriptionTitle = styled.h2`
@@ -189,7 +182,7 @@ const Reviews = styled.ul`
   display: grid;
   flex-wrap: wrap;
   justify-content: space-between;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 700px));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-gap: 20px;
 `;
 
@@ -199,33 +192,60 @@ const Button = styled.button`
   padding: 5px 10px;
   font-size: 0.75em;
   background: ${(props) => props.theme.main};
-  border-radius: 5px;
+  border-radius: 50%;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   margin: 10px 0;
+
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  margin: 0;
+  width: 38px;
+  height: 38px;
+  svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+    position: absolute;
+  }
 `;
 
 const ButtonPhone = styled(Button)`
   svg {
-    width: 24px;
-    height: 24px;
-    fill: white;
-    position: relative;
-    top: 2px;
-    margin-right: 5px;
+    left: 5px;
+    top: 7px;
+  }
+`;
+const ButtonLocation = styled(Button)`
+  svg {
+    left: 9px;
+    top: 7px;
   }
 `;
 
 const ReviewItem = styled.li`
-  border: 1px solid ${(props) => props.theme.secondary};
   border-radius: 5px;
   padding: 10px 15px;
   display: flex;
   flex-wrap: wrap;
   background: white;
+  position: relative;
+  box-shadow: 0 0 10px 3px #0000002e;
+
+  &:before {
+    content: "";
+    display: flex;
+    width: 100%;
+    height: 4px;
+    background: ${(props) => props.theme.secondary};
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 `;
 
 const HalfWrapper = styled.div`
@@ -356,7 +376,7 @@ function BusinessDetail({ businessList }) {
           <ItemDescription onClick={() => openAddress(location.address1)}>
             <ItemDescriptionTitle>Address:</ItemDescriptionTitle>
             <Address>{location.address1}</Address>
-            <Button>
+            <ButtonLocation>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 version="1.1"
@@ -378,8 +398,7 @@ function BusinessDetail({ businessList }) {
                   />
                 </g>
               </svg>
-              View in Maps
-            </Button>
+            </ButtonLocation>
           </ItemDescription>
 
           {!isNil(phone) && !isEmpty(phone) && (
@@ -396,7 +415,6 @@ function BusinessDetail({ businessList }) {
                 >
                   <path d="M968.8 715.3l-119-119.1c-23.5-24.4-51.9-37.2-82-37.2-29.9 0-58.5 12.8-82.7 36.9l-62 62c-3.1-1.6-6.1-3.1-8.9-4.5-7.3-3.6-14.3-7.2-20.3-11-62.9-39.9-120.2-92.2-175.3-159.7-24.3-30.7-41.1-56.5-53.3-81.9 15.7-14.7 30.5-29.7 44.5-44.1 5.9-6 12.1-12.2 18.1-18.2 24.8-24.8 37.9-53.7 37.9-83.5 0-30-13.1-58.9-37.9-83.5l-59.1-59.1c-6.7-6.7-13.1-13.2-19.7-20.1l-0.3-0.3c-12.9-13.3-26.8-27.4-40.7-40.3-23.6-23.1-51.8-35.3-81.6-35.3-29.6 0-58.1 12.3-82.4 35.5l-74.5 74.5c-30.1 29.8-47.1 66.2-50.6 108.2-4 50 5.1 102.8 28.6 165.9 35.4 96.2 88.7 185.2 167.7 280.1v0c95.7 114.4 211.3 204.9 343.4 269l0.1 0.1c51.1 24.2 119.5 52.6 195.2 57.5h0.9c4.4 0.2 8.9 0.4 13.7 0.4 54.3 0 98.1-18.8 133.8-57.5 0.6-0.7 1.4-1.5 2.2-2.6 10-11.9 21.4-23.1 33.6-34.8l2.8-2.7c11.4-10.9 20.4-19.9 28.4-28.2 23.9-24.9 36.5-53.8 36.4-83.7 0-30-12.8-58.6-37-82.8zM101.5 241.6v0c2-22.7 10.5-40.8 26.6-56.9l73.7-73.7c8.1-7.8 16.6-12 24.5-12 9.6 0 18.1 6.6 23.5 12.1l0.6 0.6c11.2 10.4 22 21.4 33.4 33l5.2 5.3c3.4 3.5 6.9 7 10.4 10.6 3.4 3.4 6.8 6.9 10.2 10.4l59.3 59.3c6.2 6.2 13.6 15.6 13.6 25s-7.4 18.8-13.6 25c-3.1 3.1-6.2 6.2-9.3 9.4-3 3.1-6.1 6.2-9.2 9.3l-4.2 4.2c-16.7 16.9-32.6 32.9-49.7 48.2l-1.7 1.7c-25.9 25.9-17 52.7-14.1 61.5 0.2 0.7 0.4 1.2 0.6 1.8l0.4 1c16.2 38.8 38.4 75 72 117.3l0.1 0.1c60.5 74.6 124.3 132.7 195.2 177.8 7.8 5.1 15.7 9.1 23.4 12.9 1.4 0.7 2.9 1.4 4.3 2.2l0.1 0.1c7.3 3.6 14.3 7.2 20.3 11l1.8 1c0.6 0.3 1.2 0.7 1.8 1 8.8 4.5 17.9 6.8 27 6.8 15.4 0 29.4-6.2 41.6-18.5l74.2-74.2c5.8-5.8 14.6-12.6 24.2-12.6 9.8 0 18.3 7.6 22.6 12.2l0.2 0.2 119.8 119.6c17.2 17.2 16.9 32.4-0.8 50.8l-0.2 0.2c-8.4 9-17.3 17.6-25.7 25.7l-2.4 2.3c-13.4 13-27.2 26.4-40.1 41.8-19.6 21-41.9 30.3-72.3 30.3-2.8 0-6-0.2-9.2-0.4-62.1-4-120.6-28.5-164.7-49.5-121.4-58.8-227.7-142-315.8-247.4-72.7-87.5-121.5-168.8-153.8-255.9-19.1-51.4-26.8-93-23.8-130.6z" />
                 </svg>
-                Call
               </ButtonPhone>
             </ItemDescription>
           )}

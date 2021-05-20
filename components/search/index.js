@@ -64,7 +64,7 @@ const Content = styled.div`
   z-index: 3;
   align-items: center;
   max-width: 320px;
-  top: 150px;
+  top: 120px;
   left: calc(50% - 320px / 2);
   background: white;
   border-radius: 20px;
@@ -82,7 +82,6 @@ const Label = styled.label`
 const InputContainer = styled.div`
   position: relative;
   width: 100%;
-  /* width: ${(props) => (props.loading ? 13 : 100)}%; */
   display: flex;
   transition: 0.5s ease;
   flex-direction: column;
@@ -90,19 +89,6 @@ const InputContainer = styled.div`
   &:first-of-type {
     margin-bottom: 10px;
   }
-  /* animation: ${(props) => (props.error ? "errorInput 2s ease" : "none")};
-
-  @keyframes errorInput {
-    0% {
-      width: 13%;
-    }
-    50% {
-      width: 13%;
-    }
-    100% {
-      width: 100%;
-    }
-  } */
 `;
 
 const ButtonIconSave = styled.button`
