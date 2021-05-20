@@ -209,7 +209,7 @@ const Reviews = styled.ul`
 
 const Address = styled.address``;
 
-const Button = styled.button`
+const Button = styled.a`
   padding: 5px 10px;
   font-size: 0.75em;
   background: ${(props) => props.theme.main};
