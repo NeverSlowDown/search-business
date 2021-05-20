@@ -35,13 +35,6 @@ export const Container = styled.article`
   }
 `;
 
-const ImageContainer = styled.div`
-  border: 20px solid white;
-  border-left: 15px solid white;
-  border-right: 15px solid white;
-  position: relative;
-`;
-
 const BusinessMainImage = styled.figure`
   display: flex;
   justify-content: center;
@@ -73,6 +66,7 @@ const FirstLine = styled.div`
   display: flex;
   align-items: baseline;
   margin-bottom: 10px;
+  cursor: pointer;
 `;
 
 const Name = styled.span`
@@ -80,7 +74,25 @@ const Name = styled.span`
   font-size: 1em;
   flex: 1;
   padding-right: 10px;
+  transition: 0.3s ease;
+  ${FirstLine}:hover & {
+    color: ${(props) => props.theme.main};
+  }
 `;
+
+const ImageContainer = styled.div`
+  border: 20px solid white;
+  border-left: 15px solid white;
+  border-right: 15px solid white;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    & ~ ${Description} > ${FirstLine} > ${Name} {
+      color: ${(props) => props.theme.main};
+    }
+  }
+`;
+
 const Rating = styled.div`
   font-weight: 400;
   font-size: 1em;
@@ -130,6 +142,11 @@ const Phone = styled.a`
   color: black;
   text-decoration: none;
   font-size: 0.75em;
+  transition: 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    color: ${(props) => props.theme.main};
+  }
 `;
 
 const Location = styled.button`
@@ -141,6 +158,11 @@ const Location = styled.button`
   flex-wrap: wrap;
   padding: 0;
   font-size: 0.75em;
+  transition: 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    color: ${(props) => props.theme.main};
+  }
 `;
 
 const Seen = styled.div`
@@ -237,7 +259,15 @@ function Card({ item, setBusinessSeen }) {
         </Seen>
       )}
       <Description>
-        <FirstLine>
+        <FirstLine
+          onClick={() => {
+            handleSeen(item);
+            router.push({
+              pathname: "/business/[id]",
+              query: { id: alias },
+            });
+          }}
+        >
           <Name>{name}</Name>
           <Rating>
             {rating}
