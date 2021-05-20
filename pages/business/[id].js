@@ -278,6 +278,7 @@ const GoBackButton = styled.button`
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
   svg {
     width: 32px;
     height: 32px;
